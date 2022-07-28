@@ -16,8 +16,9 @@ jobs:
   build-qa:
     if: github.event.release.tag_name == 'qa' || startsWith(github.event.release.tag_name, 'qa/')
     uses: ./.github/workflows/_build.yml
-    with:
+    secrets:
       deploy-url: ${{ secrets.QA_URL }}
+    with:
       deploy-path: /
   deploy-qa:
     needs:

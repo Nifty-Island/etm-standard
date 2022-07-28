@@ -5,11 +5,11 @@ name: _build
 
 on:
   workflow_call:
-    inputs:
+    secrets:
       deploy-url:
         description: prefix for deployment URL scheme and host
         required: false
-        type: string
+    inputs:
       deploy-path:
         description: prefix for deployment URL path; should start and end with "/"
         default: /
@@ -54,7 +54,7 @@ jobs:
       #- run: npm audit report
       - run: npm run build
         env:
-          DOCUSAURUS_URL: ${{ inputs.deploy-url }}
+          DOCUSAURUS_URL: ${{ secrets.deploy-url }}
           DOCUSAURUS_BASE_URL: ${{ inputs.deploy-path }}
 
       - name: Upload Build Artifact
@@ -64,4 +64,4 @@ jobs:
           path: build/
           if-no-files-found: error
     outputs:
-      docs-site: ${{ inputs.deploy-url }}${{ inputs.deploy-path }}
+      docs-site: ${{ secrets.deploy-url }}${{ inputs.deploy-path }}

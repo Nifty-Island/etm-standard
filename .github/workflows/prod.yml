@@ -16,8 +16,9 @@ on:
 jobs:
   build-prod:
     uses: ./.github/workflows/_build.yml
-    with:
+    secrets:
       deploy-url: ${{ secrets.PROD_URL }}
+    with:
       deploy-path: /
   deploy-prod:
     needs:

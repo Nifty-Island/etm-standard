@@ -21,8 +21,9 @@ jobs:
   # build first and store an artifact with the workflow run
   build-dev:
     uses: ./.github/workflows/_build.yml
-    with:
+    secrets:
       deploy-url: ${{ secrets.DEV_URL }}
+    with:
       deploy-path: /
   # deploy that artifact to dev
   deploy-dev:

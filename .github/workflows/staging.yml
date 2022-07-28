@@ -14,8 +14,9 @@ jobs:
   build-staging:
     if: github.event.release.tag_name == 'staging' || startsWith(github.event.release.tag_name, 'staging/')
     uses: ./.github/workflows/_build.yml
-    with:
+    secrets:
       deploy-url: ${{ secrets.STAGING_URL }}
+    with:
       deploy-path: /
   deploy-staging:
     needs:
