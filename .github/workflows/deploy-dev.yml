@@ -1,0 +1,17 @@
+# vim: set ai expandtab ts=4 sw=4
+---
+name: "Dev: Deploy from Last Build"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-dev:
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      artifact-workflow: dev.yml
+    secrets:
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_DEV }}
+      aws-upload-path: ${{ secrets.AWS_UPLOAD_BUCKET_DEV }}/
+      github-token: ${{ secrets.ACTIONS_PAT }}

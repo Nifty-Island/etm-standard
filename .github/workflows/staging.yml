@@ -1,0 +1,30 @@
+# vim: set ai expandtab ts=4 sw=4
+---
+name: "Staging: Build and Deploy"
+
+on:
+  # automatically run when a release tagged "staging" is created
+  release:
+    types:
+    - prereleased
+  # allow manual deployments from the GitHub Actions console
+  workflow_dispatch:
+
+jobs:
+  build-staging:
+    if: github.event.release.tag_name == 'staging' || startsWith(github.event.release.tag_name, 'staging/')
+    uses: ./.github/workflows/_build.yml
+    with:
+      deploy-url: ${{ secrets.STAGING_URL }}
+      deploy-path: /
+  deploy-staging:
+    needs:
+      - build-staging
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      artifact-workflow: staging.yml
+    secrets:
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_STAGING }}
+      aws-upload-path: "${{ secrets.AWS_UPLOAD_BUCKET_STAGING }}/"
+      github-token: ${{ secrets.GITHUB_TOKEN }}

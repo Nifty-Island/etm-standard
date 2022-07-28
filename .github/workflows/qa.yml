@@ -1,0 +1,32 @@
+# vim: set ai expandtab ts=4 sw=4
+---
+name: "QA: Build and Deploy"
+
+on:
+  # automatically run when a release tagged "qa" is created
+  release:
+    types:
+    - created
+    - published
+    - edited
+  # allow manual deployments from the GitHub Actions console
+  workflow_dispatch:
+
+jobs:
+  build-qa:
+    if: github.event.release.tag_name == 'qa' || startsWith(github.event.release.tag_name, 'qa/')
+    uses: ./.github/workflows/_build.yml
+    with:
+      deploy-url: ${{ secrets.QA_URL }}
+      deploy-path: /
+  deploy-qa:
+    needs:
+      - build-qa
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      artifact-workflow: qa.yml
+    secrets:
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_QA }}
+      aws-upload-path: "${{ secrets.AWS_UPLOAD_BUCKET_QA }}/"
+      github-token: ${{ secrets.GITHUB_TOKEN }}

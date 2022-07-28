@@ -1,0 +1,67 @@
+# vim: set ai expandtab ts=4 sw=4
+---
+
+name: _deploy
+
+on:
+  workflow_call:
+    inputs:
+      artifact-workflow:
+        description: Workflow where the artifact to deploy is attached
+        required: true
+        type: string
+    secrets:
+      aws-region:
+        description: AWS region where builds will be pushed to S3
+        required: true
+      aws-role-to-assume:
+        description: AWS role to assume
+        required: true
+      aws-upload-path:
+        description: AWS S3 bucket/prefix where the deployable artifacts will be published
+        required: true
+      github-token:
+        description: GitHub or Peronal Access Token with access to the repo
+        required: true
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      id-token: write
+      contents: read
+    env:
+      GCM_CREDENTIAL_STORE: cache
+    steps:
+
+      - name: Workflow Environment
+        run: |
+          env |sort
+
+      - name: Session Name
+        run: |
+          echo "AWS_SESSION_NAME=$(${{ env.GITHUB_ACTOR }}@${{ env.GITHUB_REPOSITORY }},run=${{ env.GITHUB_RUN_ID }},job=${{ env.GITHUB_RUN_NUMBER }} | tr -C '[A-Za-z0-9_=,.@-]' '_')" >> $GITHUB_ENV
+
+      # https://github.com/aws-actions/configure-aws-credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.aws-role-to-assume }}
+          role-session-name: ${{ env.AWS_SESSION_NAME }}
+          aws-region: ${{ secrets.aws-region }}
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: standards-docs
+          path: standards-docs
+
+      - name: Upload build to S3
+        run: |
+          # upload zip file with build artifacts to s3
+          printf "\n\n## Uploading docs to s3://${{ secrets.aws-upload-path }}\n\n"
+          aws s3 sync standards-docs "s3://${{ secrets.aws-upload-path }}"
+
+          aws s3 ls "s3://${{ secrets.aws-upload-path }}"

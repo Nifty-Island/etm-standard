@@ -1,0 +1,38 @@
+# vim: set ai expandtab ts=4 sw=4
+---
+name: "Dev: Build and Deploy"
+
+on:
+  # automatically deploy to dev on any merge to main
+  push:
+    branches:
+      - main
+    paths:
+      # run whenever any of the repo files change
+      - '**'
+      # run whenever the workflow changes
+      - .github/workflows/dev.yml
+      # but ignore all the other workflow changes
+      - '!.github/workflows/*'
+  # allow manual deployments from the GitHub Actions console
+  workflow_dispatch:
+
+jobs:
+  # build first and store an artifact with the workflow run
+  build-dev:
+    uses: ./.github/workflows/_build.yml
+    with:
+      deploy-url: ${{ secrets.DEV_URL }}
+      deploy-path: /
+  # deploy that artifact to dev
+  deploy-dev:
+    needs:
+      - build-dev
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      artifact-workflow: dev.yml
+    secrets:
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_DEV }}
+      aws-upload-path: "${{ secrets.AWS_UPLOAD_BUCKET_DEV }}/"
+      github-token: ${{ secrets.GITHUB_TOKEN }}

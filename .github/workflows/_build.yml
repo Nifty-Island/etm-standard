@@ -1,0 +1,67 @@
+# vim: set ai expandtab ts=4 sw=4
+---
+
+name: _build
+
+on:
+  workflow_call:
+    inputs:
+      deploy-url:
+        description: prefix for deployment URL scheme and host
+        required: false
+        type: string
+      deploy-path:
+        description: prefix for deployment URL path; should start and end with "/"
+        default: /
+        required: false
+        type: string
+
+jobs:
+  docusaurus:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    env:
+      GCM_CREDENTIAL_STORE: cache
+    steps:
+
+      - name: Workflow Environment
+        run: |
+          env |sort
+
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: npm
+
+      - name: NPM Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - run: npm cache verify
+      - run: npm install
+      - run: npx docusaurus --version
+      # Would be nice...
+      #- run: npm audit report
+      - run: npm run build
+        env:
+          DOCUSAURUS_URL: ${{ inputs.deploy-url }}
+          DOCUSAURUS_BASE_URL: ${{ inputs.deploy-path }}
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: standards-docs
+          path: build/
+          if-no-files-found: error
+    outputs:
+      docs-site: ${{ inputs.deploy-url }}${{ inputs.deploy-path }}

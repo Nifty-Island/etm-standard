@@ -1,0 +1,32 @@
+# vim: set ai expandtab ts=4 sw=4
+---
+name: "Prod: Build and Deploy"
+
+on:
+  # automatically run when a release tagged "qa" is created
+  #release:
+  #  types:
+  #  - released
+  #  tags:
+  #  - prod
+  #  - prod/*
+  # allow manual deployments from the GitHub Actions console
+  workflow_dispatch:
+
+jobs:
+  build-prod:
+    uses: ./.github/workflows/_build.yml
+    with:
+      deploy-url: ${{ secrets.PROD_URL }}
+      deploy-path: /
+  deploy-prod:
+    needs:
+      - build-prod
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      artifact-workflow: prod.yml
+    secrets:
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_PROD }}
+      aws-upload-path: "${{ secrets.AWS_UPLOAD_BUCKET_PROD }}/"
+      github-token: ${{ secrets.GITHUB_TOKEN }}
