@@ -4,11 +4,13 @@ sidebar_position: 1
 ---
 
 # ETM_ATTRIBUTES_v1.0.0
+### ETM Attributes Extension
 
 | <!-- -->    | <!-- -->    |
 |-------------|-------------|
 | Authors   | Zack Pantely, Kavan Sikand |
 | Contributors| | 
+| Discussions To | https://github.com/Nifty-Island/etm-standard/discussions/6 |
 | Type | ETM Extension |
 | Extension Name | ETM_ATTRIBUTES_v1.0.0 |
 | Created | 2022-06-06 |
@@ -30,7 +32,7 @@ sidebar_position: 1
 This extension is a formalization of a de-facto standard in the Non-Fungible Token (NFT) community. It draws heavy inspiration from [OpenSea's Attributes Standard](https://docs.opensea.io/docs/metadata-standards#attributes), and allows it to be used in conjunction with other extensions to [ETM](ETM_v1.0.0).
 
 ## Abstract
-This extension exists only to formalize, name, and freeze the attributes standard provided by OpenSea. In formalizing this standard, we seek to remove all ambiguity about the form and intended interpretation of items in the attributes array. In naming this standard, we seek to allow it to be identified by a metadata consumer or possibly replaced with a future standard. In freezing this standard, a consumer can be sure about how to interpret the attributes array for all time, even if OpenSea were to later update their standard.
+This extension exists only to formalize, name, and freeze the attributes standard provided by OpenSea. In formalizing this standard, we seek to remove all ambiguity about the form and intended interpretation of items in the attributes array. In naming this standard, we seek to allow its form to be identified by a metadata consumer or possibly replaced with a future standard. In freezing this standard, we seek to let consumers be sure about how to interpret the attributes array for all time, even if OpenSea were to later update their standard.
 
 ## Motivation
 In the future, it is likely that more functionality and flexibility will be desired when assigning attributes to an NFT. Adopting this standard now means that all metadata creators and consumers will have the ability to migrate seamlessly to a new standard at a later time while still supporting NFTs that were made following an older standard. If such adoption does not take place, the longer-term solution may be to add a new top-level key such as "attributes2" in order to make breaking changes to the standard -- a fate which should make us cringe in disgust and dismay.
@@ -48,7 +50,7 @@ This specification adds the `attributes` key to the top level of [ETM](ETM_v1.0.
   "attributes": []
 }
 ```
-In the above metadata, the `attributes` array is left empty in order to show the minimum valid implementation of this extension. For a non-trivial example, refer to the [Metadata Examples](##Metadata-Examples) section.
+In the above metadata, the `attributes` array is left empty in order to show the minimum valid implementation of this extension. For a non-trivial example, refer to the [Metadata Examples](#metadata-examples) section.
 
 #### Extended Top-Level Data Types:
 
@@ -128,7 +130,7 @@ The following is an example of this extension being used as a wrapper for OpenSe
 ```
 
 ## Backwards Compatibility
-Because this standard is an extension upon ERC-XXXX, backwards compatibility is not applicable.
+This extension to the metadata standard is backwards compatible with existing metadata suggestions proposed in ERC-721 and ERC-1155, as well as [ETM](ETM_v1.0.0).
 
 ## Security Considerations
 Because this standard is merely a metadata extension and does not interface with the underlying contract, there are no additional security considerations.

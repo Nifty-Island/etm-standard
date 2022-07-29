@@ -4,11 +4,13 @@ sidebar_position: 1
 ---
 
 # ETM_MULTIASSET_v1.0.0
+### ETM Multi-Asset Extension
 
 | <!-- -->    | <!-- -->    |
 |-------------|-------------|
 | Authors   | Zack Pantely, Kavan Sikand |
 | Contributors|Justin Bloomer, David Ceballos, Thomas Lisankie, Madrone, Spencer Obstinik, Eric Struhl, Tasheme Thomas, Florian Uhde, Andy Watson | 
+| Discussions To | https://github.com/Nifty-Island/etm-standard/discussions/5 |
 | Type | ETM Extension |
 | Extension Name | ETM_MULTIASSET_v1.0.0 |
 | Created | 2022-06-06 |
