@@ -1,4 +1,4 @@
-# Extensible Token Metadata (ETM)
+# Extensible Token Metadata (ETM) Standard
 
 This repository tracks ongoing improvements to the ETM standard. In the current building phase, it is maintained by the creators of the repository, but the future goal is to have this process maintained by the community.
 
