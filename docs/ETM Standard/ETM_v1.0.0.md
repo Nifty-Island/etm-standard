@@ -23,7 +23,7 @@ sidebar_position: 1
 - [Specification](#specification)
     - [JSON Schema](#json-schema)
     - [Top Level Data Types](#top-level-data-types)
-    - [`ExtensionName` Formatting](#extensionname-formatting)
+    - [`ExtensionName` Format](#extensionname-format)
 - [Metadata Examples](#metadata-examples)
     - [ERC-721 Compatibility](#erc-721-compatibility)
     - [Adding an Extension](#adding-an-extension)
@@ -79,14 +79,13 @@ The `extensions` array specifies which metadata extensions this metadata adheres
 
 The format of an `ExtensionName` is defined as:
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[*extension developer code*]_[*extension name/number*]_v[*version*]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ETM_[*extension name*]_v[*version*]
 
 With each piece defined as:
-- **Extension developer code:** a unique code (which MUST NOT contain spaces or underscores) indicating the party or developer who originated the extension
-- **Extension name or number:** a name or number (which MUST NOT contain spaces or underscores) which is unique per extension developer code
+- **Extension name:** a unique name (which MUST NOT contain spaces or underscores)
 - **Version:** the version of the standard (which MUST follow [Semantic Versioning 2.0.0](https://semver.org/))
 
-For example, extending with the initial release of Nifty Island's [Multi-Asset Extension](ETM_MULTIASSET_v1.0.0#top-level-metadata) would have "ETM_MULTIASSET_v1.0.0" as a value in the `extensions` array.
+For example, extending with the initial release of the [Multi-Asset Extension](ETM_MULTIASSET_v1.0.0#top-level-metadata) would have "ETM_MULTIASSET_v1.0.0" as a value in the `extensions` array.
 
 In alignment with semantic versioning, an increment to the MAJOR version indicates breaking changes. This means that metadata interpreters must check at least the MAJOR version to determine compatibility with an extension standard. The MINOR version can be optionally checked to detect the presence of additional functionality.
 
