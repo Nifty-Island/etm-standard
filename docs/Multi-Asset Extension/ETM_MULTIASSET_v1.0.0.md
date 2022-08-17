@@ -119,19 +119,19 @@ The `File` data type is a JSON object which represents a single file. The fields
 | name    | string     | OPTIONAL    |
 | description     | string     | OPTIONAL     |
 | url     | string (URL)     | REQUIRED     |
-| fileType     | string (MIME type)    | REQUIRED     |
+| file_type     | string (MIME type)    | REQUIRED     |
 
 The `name` and `description` fields MAY be omitted (likely if there is only one `File` in the array), in which case the metadata interpreter might choose to fall back to the `name` and `description` fields of the `Asset` (or, if that is omitted, the metadata's top-level `name` and `description` fields).
 
-The `url` key provides a URL to the file to be downloaded. This URL is NOT REQUIRED to contain a file extension since that is provided by the `fileType` value.
+The `url` key provides a URL to the file to be downloaded. This URL is NOT REQUIRED to contain a file extension since that is provided by the `file_type` value.
 
-The `fileType` key provides media type and a file extension in a [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) format. This is helpful during interpretation because some URLs, such as many InterPlanetary File System (IPFS) URLs, do not contain a file extension. For convenience in interpreting this standard, we note here that the nomenclature of MIME types is [*type*]/[*subtype*] where the *type* is a media type and the *subtype* is a file extension.
+The `file_type` key provides media type and a file extension in a [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) format. This is helpful during interpretation because some URLs, such as many InterPlanetary File System (IPFS) URLs, do not contain a file extension. For convenience in interpreting this standard, we note here that the nomenclature of MIME types is [*type*]/[*subtype*] where the *type* is a media type and the *subtype* is a file extension.
 
 #### Assets and Files:
 
 It should be understood that an `Asset` represents some *thing* and a `File` gives a representation of that *thing* (of which there may be one or more). 
 
-Each `Asset` REQUIRES that at least one `File` in the `files` array is of a `fileType` with a MIME *type* that matches the asset's `MediaType` (e.g. a "model" `MediaType` requires at least one file with a `fileType` of "model/[*any subtype*]").
+Each `Asset` REQUIRES that at least one `File` in the `files` array is of a `file_type` with a MIME *type* that matches the asset's `MediaType` (e.g. a "model" `MediaType` requires at least one file with a `file_type` of "model/[*any subtype*]").
 
 Multiple files with the same MIME *type* as the `Asset`'s `MediaType` MAY be included if they have different MIME *subtypes* and represent the same asset (in the example of a model, a "model/fbx" and a "model/obj" could both be included in the same `files` array if they represent the same asset with different file types, but two "model/fbx" files are not allowed in the same `files` array because this would cause ambiguity; in this case, a different `Asset` should be used to host each `File`). This restriction allows the metadata interpreter to assume that any `File` with the same MIME *type* as the `Asset`'s `MediaType` can equally be used to represent the asset and offers the choice of which file to use.
 
@@ -142,21 +142,21 @@ This standard makes no restrictions to the MIME *subtypes* that can be used. The
 #### Standard `MediaType` Definitions
 This standard defines a set of standardized `MediaType` values in order to provide a known interpretation for common types of assets. The `MediaType` MUST be a value from this list. These definitions and their requirements are defined below.
 
-- **model:** The "model" `MediaType` describes a single model, any previews of that model, and any supporting files (such as animations). This `MediaType` REQUIRES at least one file in the `files` array with a `fileType` that has a a model MIME *type* (e.g. model/fbx).
+- **model:** The "model" `MediaType` describes a single model, any previews of that model, and any supporting files (such as animations). This `MediaType` REQUIRES at least one file in the `files` array with a `file_type` that has a a model MIME *type* (e.g. model/fbx).
 
-- **image:** The "image" `MediaType` describes an image asset. This `MediaType` REQUIRES at least one file in the `files` array with a `fileType` that has an image MIME *type* (e.g. image/png). In some cases, an image will be provided by the top-level `image` key, so the use-case for this `MediaType` may be to provide a higher-resolution version of the asset provided by the top-level `image` key.
+- **image:** The "image" `MediaType` describes an image asset. This `MediaType` REQUIRES at least one file in the `files` array with a `file_type` that has an image MIME *type* (e.g. image/png). In some cases, an image will be provided by the top-level `image` key, so the use-case for this `MediaType` may be to provide a higher-resolution version of the asset provided by the top-level `image` key.
 
-- **video:** The "video" `MediaType` describes a video asset. This `MediaType` REQUIRES at least one file in the `files` array with a `fileType` that has a video MIME *type* (e.g. video/mp4). In some cases, a video will be provided by the top-level `image` key, so the use-case for this `MediaType` may be to provide a higher-resolution version of the asset provided by the top-level `image` key.
+- **video:** The "video" `MediaType` describes a video asset. This `MediaType` REQUIRES at least one file in the `files` array with a `file_type` that has a video MIME *type* (e.g. video/mp4). In some cases, a video will be provided by the top-level `image` key, so the use-case for this `MediaType` may be to provide a higher-resolution version of the asset provided by the top-level `image` key.
 
-- **animation:** The "animation" `MediaType` describes a single animation and any previews of that animation. This `MediaType` REQUIRES at least one file in the `files` array with a `fileType` that has an animation MIME *type* (e.g. animation/fbx).
+- **animation:** The "animation" `MediaType` describes a single animation and any previews of that animation. This `MediaType` REQUIRES at least one file in the `files` array with a `file_type` that has an animation MIME *type* (e.g. animation/fbx).
 
-- **audio:** The "audio" `MediaType` describes a single audio track and any previews of that track. This `MediaType` REQUIRES at least one file in the `files` array with a `fileType` that has an audio MIME *type* (e.g. audio/wav).
+- **audio:** The "audio" `MediaType` describes a single audio track and any previews of that track. This `MediaType` REQUIRES at least one file in the `files` array with a `file_type` that has an audio MIME *type* (e.g. audio/wav).
 
-- **text:** The "text" `MediaType` describes a single body of text and any previews of that text. This `MediaType` REQUIRES at least one file in the `files` array with a `fileType` that has a text MIME *type* (e.g. text/txt).
+- **text:** The "text" `MediaType` describes a single body of text and any previews of that text. This `MediaType` REQUIRES at least one file in the `files` array with a `file_type` that has a text MIME *type* (e.g. text/txt).
 
-- **font:** The "font" `MediaType` describes a single font and any previews of that font. This `MediaType` REQUIRES at least one file in the `files` array with a `fileType` that has a font MIME *type* (e.g. font/ttf).
+- **font:** The "font" `MediaType` describes a single font and any previews of that font. This `MediaType` REQUIRES at least one file in the `files` array with a `file_type` that has a font MIME *type* (e.g. font/ttf).
 
-- **application:** The "application" `MediaType` describes a single application and any previews of that application. This `MediaType` REQUIRES at least one file in the `files` array with a `fileType` that has an application MIME *type* (e.g. application/exe).
+- **application:** The "application" `MediaType` describes a single application and any previews of that application. This `MediaType` REQUIRES at least one file in the `files` array with a `file_type` that has an application MIME *type* (e.g. application/exe).
 
 ## Metadata Examples
 
@@ -177,7 +177,7 @@ The following is an example of this extension including data for an NFT that con
       "files": [
         {
           "url": "https://ipfs.io/bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
-          "fileType": "model/fbx"
+          "file_type": "model/fbx"
         }
       ]
     },
@@ -188,7 +188,7 @@ The following is an example of this extension including data for an NFT that con
       "files": [
         {
           "url": "https://ipfs.io/idzbf55yqtglco3fbaqlyufe3fn62y7hu67uh7mdu7pfs5tzrydgiebyfab",
-          "fileType": "model/fbx"
+          "file_type": "model/fbx"
         }
       ]
     }
@@ -212,19 +212,19 @@ The following is an example of this extension including data for an NFT that con
           "name": "Shirt Image",
           "description": "A high-res render of a snazzy shirt.",
           "url": "https://ipfs.io/idzbf55yqtglco3fbaqlyufe3fn62y7hu67uh7mdu7pfs5tzrydgiebyfab",
-          "fileType": "image/png"
+          "file_type": "image/png"
         },
         {
           "name": "Shirt Video",
           "description": "A rendered video of a snazzy shirt.",
           "url": "https://ipfs.io/beyzbafgdiryt5sfp7udm7hu76uh7y26nf3eblfyaquf3otqlgcy55fbdzi",
-          "fileType": "video/mp4"
+          "file_type": "video/mp4"
         },
         {
           "name": "Shirt Model",
           "description": "A rigged model of a snazzy shirt.",
           "url": "https://ipfs.io/bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
-          "fileType": "model/fbx"
+          "file_type": "model/fbx"
         }
       ]
     }
@@ -251,13 +251,13 @@ The following is an example of the metadata for an NFT representing an entire ou
           "name": "Shirt Image",
           "description": "A high-res render of a snazzy shirt.",
           "url": "https://ipfs.io/idzbf55yqtglco3fbaqlyufe3fn62y7hu67uh7mdu7pfs5tzrydgiebyfab",
-          "fileType": "image/png"
+          "file_type": "image/png"
         },
         {
           "name": "Shirt Model",
           "description": "A rigged model of a snazzy shirt.",
           "url": "https://ipfs.io/bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
-          "fileType": "model/fbx"
+          "file_type": "model/fbx"
         }
       ]
     },
@@ -268,13 +268,13 @@ The following is an example of the metadata for an NFT representing an entire ou
           "name": "Pants Image",
           "description": "A high-res render of sweet pants.",
           "url": "https://ipfs.io/idzbf55yqtglco3fbaqlyufe3fn62y7hu67uh7mdu7pfs5tzrydgiebyfab",
-          "fileType": "image/png"
+          "file_type": "image/png"
         },
         {
           "name": "Pants Model",
           "description": "A rigged model of sweet pants.",
           "url": "https://ipfs.io/bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
-          "fileType": "model/fbx"
+          "file_type": "model/fbx"
         }
       ]
     }
